@@ -67,7 +67,7 @@ router.get('/teachers',async(req,res,next)=>{
     try {
         //const teacher = await prisma.student.findUnique();
         const teachers= await prisma.teacher.findMany({
-            //include:{student:true}
+            include:{students:true}
         });
         res.json(teachers)
         
