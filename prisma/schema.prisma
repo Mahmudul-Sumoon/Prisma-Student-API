@@ -4,26 +4,23 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+ // previewFeatures = ["mongoDb"]
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 model Student{
-  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  roll  Int 
-  reg Int 
-  @@unique([roll], map: "roll should be Unique")
-  @@unique([reg], map: "reg should be Unique")
+  id Int @id @default(autoincrement())
+  roll  Int @unique
+  reg Int @unique
   name  String 
-  teacher Teacher @relation(fields: [teacheId],references: [id])
-  teacheId String 
+  teacher Teacher @relation(fields: [teacherId],references: [id])
+  teacherId Int
 }
 model Teacher{
-  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id  Int @id @default(autoincrement())  
   name String
-  @@unique([name],map: "Name should be Unique") 
   students Student[]
 }
