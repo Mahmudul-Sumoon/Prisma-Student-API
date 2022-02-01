@@ -27,3 +27,10 @@ model Teacher{
   @@unique([name],map: "Name should be Unique") 
   students Student[]
 }
+model User{
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name String 
+  username String @unique
+  password String 
+}
+

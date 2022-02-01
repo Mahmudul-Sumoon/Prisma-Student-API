@@ -1,3 +1,8 @@
+# Working api endpoint
+https://student-api-v2.herokuapp.com/
+
+
+
 # PRISMA WITH MONGODB (USER MANUAL)
 
 Prisma currently supports
@@ -187,6 +192,80 @@ and
 prisma db push
 ```
 
-# Deploy
-
+## Deploy
+<hr>
 Now deploy the whole code to the [Heroku](https://www.heroku.com/), don't forget to add .env file's DATABASE_URL in heroku.
+
+
+
+# JWT
+
+installation properties
+```js
+npm i jsonwebtoken
+```
+AND
+```js
+npm i bcrypt
+```
+> ### Use of Bcrypt
+- bcrypt use for password encryption generate and compare
+1. generate and provide a token for how long you want
+```js
+    const hashedPassword = await bcrypt.hash(req.body.password,saltRounds);
+
+```
+1. compare
+```js
+    const isValid = await bcrypt.compare(req.body.password,users.password);
+    
+```
+
+> ### Use of JWT
+- JWT use for authorization 
+- after the compare if isValid is true then we can generate a token for authorization how long we want
+```js
+          if (isValid) {
+          //generate token
+          const token = jwt.sign({
+            username:users.username,
+            userId:users._id,
+          },process.env.JWT_SECRET,{
+            expiresIn:'7d'
+          });
+          res.status(200).json({
+              "access-token":token,
+              "message":"signIn Successfull"
+          })
+          
+      } 
+```
+
+- now we have to verify the token for access authorized routes via a middleware
+```js
+const jwt = require("jsonwebtoken");
+
+const checkSignIn = (req,res,next)=>{
+    try {
+        const {authorization} = req.headers;
+        const token = authorization.split(' ')[1];
+        const decode = jwt.verify(token,process.env.JWT_SECRET);
+        req.username= decode.username;
+        req.password= decode.password;
+        next();
+    } catch (err){
+      //  console.log(err);
+        next("authorization failed");
+    }
+}
+module.exports={
+    checkSignIn,
+}
+
+```
+
+then finally add it to the route as a guard 
+```js
+// get all student
+router.get("/students",  checkSignIn,getAllStudents);
+```
