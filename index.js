@@ -1,40 +1,37 @@
 const express = require("express");
-var error = require('http-errors')
-var morgan = require('morgan')
-require('dotenv').config();
-
-
+const apiRouter = require("./routes/api.route");
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
-app.use(morgan('dev'));
+
 //connection check with postman
-app.get('/',async(req,res,next)=>{
-res.send({message:'good to go'});
+app.get("/", async(req, res, next) => {
+    res.send({ message: "good to go" });
 });
 
-app.use('/api',require('./routes/api.route'));
+app.use("/api", apiRouter);
 app.use(error404Handler);
 app.use(errorHandler);
-    
-    //404 error handler
+
+//404 error handler
 function error404Handler(req, res, next) {
-        next("no route was found!");
-    }
-    //default error handler
+    next("no route was found!");
+}
+//default error handler
 function errorHandler(err, req, res, next) {
-        if (res.headersSent) {
-            next("There was a problem in streaming!!");
+    if (res.headersSent) {
+        next("There was a problem in streaming!!");
+    } else {
+        if (err.message) {
+            res.status(500).json({ error: err.message });
         } else {
-            if (err.message) {
-                res.status(500).json({ error: err.message });
-            } else {
-                res.status(500).json({ error: err });
-            }
+            res.status(500).json({ error: err });
         }
     }
-app.listen(port,()=>{
+}
+app.listen(port, () => {
     console.log(`connection established at port ${port} `);
-})
+});
