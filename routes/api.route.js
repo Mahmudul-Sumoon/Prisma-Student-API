@@ -16,6 +16,9 @@ const { checkSignIn } = require("../middlewares/signIn_middleware");
 
 
 router.get("/", apiRouteCheck);
+router.get("/checkAuth",checkSignIn, async(req,res,next) =>{
+    res.status(200).json({message:"Authorization Sucessful!"});
+});
 //signUp
 router.post("/signUp", signUp);
 //signIn
