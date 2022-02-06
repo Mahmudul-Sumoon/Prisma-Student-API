@@ -16,7 +16,9 @@ Prisma currently supports
 ## Steps (INSTALLATION)
 
 <hr>
-- Install **Prisma** and **Prisma - Insider** extension in VS Code.
+- Install
+
+_**Prisma**_ and _**Prisma - Insider**_ extension in VS Code.
 - Install Prima in globally
 
 ```js
@@ -46,7 +48,7 @@ npm i - fsevents@latest -f --save-optional
 ## (PRISMA INSIDE CODE)
 
 <hr>
-- Initial Prisma
+- Initialzation of Prisma
 
 ```js
 npx prisma init
@@ -179,7 +181,7 @@ model Teacher{
 
 ```
 
-**EXTRA STEP : **
+**EXTRA STEP :**
 Then run
 
 ```
